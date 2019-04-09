@@ -1,0 +1,5 @@
+(executable
+  (name Flowest)
+  (public_name flowest)
+  (libraries flowest.lib)
+)

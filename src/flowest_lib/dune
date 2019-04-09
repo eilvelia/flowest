@@ -1,0 +1,4 @@
+(library
+  (name FlowestLib)
+  (public_name flowest.lib)
+)
