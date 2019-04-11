@@ -14,4 +14,17 @@ run-test: [["dune" "runtest" "-p" name]]
 depends: [
   "dune" {build & >= "1.0.0"}
   "ocaml" {>= "4.04.1"}
+  "base" {>= "v0.11" & < "v0.13"}
+  "ppx_gen_rec" {build & >= "1.0.0" & < "1.1.0"}
+  "ppx_deriving" {build}
+  "flow_parser"
+  "merlin" {dev}
+  "utop" {dev}
+]
+pin-depends: [
+  ["flow_parser.0.96.1" "git+https://github.com/Bannerets/flow.git#fork/parser"]
+
+  # Currently the latest version on OPAM shows warnings when used with Base
+  ["ppx_deriving.dev"
+    "git+https://github.com/ocaml-ppx/ppx_deriving.git#f1857c2231280b1cb7fd682d57255a64319bb717"]
 ]
