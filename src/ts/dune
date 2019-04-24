@@ -1,0 +1,6 @@
+(library
+  (name Ts)
+  (public_name flowest.ts)
+  (libraries base ppx_deriving ppx_gen_rec)
+  (preprocess (pps ppx_deriving.show ppx_gen_rec))
+)

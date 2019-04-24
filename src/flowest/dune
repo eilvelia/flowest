@@ -1,5 +1,8 @@
 (executable
   (name Flowest)
   (public_name flowest)
-  (libraries flowest.lib)
+  (libraries base flowest.lib)
+  (js_of_ocaml
+    (flags (:standard --opt 3))
+  )
 )

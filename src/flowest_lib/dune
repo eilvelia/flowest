@@ -1,4 +1,5 @@
 (library
   (name FlowestLib)
   (public_name flowest.lib)
+  (libraries base flow_parser flowest.ts)
 )

@@ -1,0 +1,4 @@
+(executable
+  (name AstViewer)
+  (libraries base flow_parser)
+)

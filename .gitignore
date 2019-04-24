@@ -5,4 +5,10 @@ _build/
 *.native
 *.byte
 *.bak
+*.bak.ml
+*.bak.d.ts
+*.bak.ts
+*.bak.js
+*.bak.flow
+*.bak.js.flow
 /*.txt

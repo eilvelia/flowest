@@ -1,0 +1,38 @@
+{
+  "private": true,
+  "name": "flowest",
+  "version": "0.0.0",
+  "description": "Convert Flow to TypeScript",
+  "main": "flowest.js",
+  "scripts": {
+    "prepack": "node copy-files"
+  },
+  "files": [
+    "flowest.js",
+    "bin",
+    "README.md",
+    "LICENSE"
+  ],
+  "bin": {
+    "flowest": "bin/flowest"
+  },
+  "keywords": [
+    "flow",
+    "flowtype",
+    "ts",
+    "typescirpt",
+    "translate",
+    "convert",
+    "flow-to-typescript"
+  ],
+  "author": "Bannerets <comonoid@protonmail.com>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Bannerets/flowest.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Bannerets/flowest/issues"
+  },
+  "homepage": "https://github.com/Bannerets/flowest#readme"
+}
