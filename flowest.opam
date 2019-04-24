@@ -16,6 +16,7 @@ depends: [
   "ocaml" {>= "4.04.1"}
   "base" {>= "v0.11" & < "v0.13"}
   "ppx_gen_rec" {build & >= "1.0.0" & < "1.1.0"}
+  "js_of_ocaml-compiler" {build & >= "3.1.0" & < "4.0.0"}
   "ppx_deriving" {build}
   "flow_parser"
   "merlin" {dev}
