@@ -25,8 +25,9 @@ and Identifier: sig
   val gen: 'a Ast.Identifier.t -> string
 end = struct
   let gen ((_, t'): _ Ast.Identifier.t) =
-    let (leading, trailing) = Syntax.gen_opt t'.comments in
-    leading ^ t'.name ^ trailing
+    (* let (leading, trailing) = Syntax.gen_opt t'.comments in
+    leading ^ t'.name ^ trailing *)
+    t'.name
 end
 
 and Class: sig
@@ -61,8 +62,9 @@ end = struct
       "/" ^ t.pattern ^ "/" ^ t.flags
   end
   let gen (t: _ Ast.Literal.t) =
-    let (leading, trailing) = Syntax.gen_opt t.comments in
-    leading ^ t.raw ^ trailing
+    (* let (leading, trailing) = Syntax.gen_opt t.comments in
+    leading ^ t.raw ^ trailing *)
+    t.raw
 end
 
 and StringLiteral: sig
