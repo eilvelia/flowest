@@ -38,6 +38,7 @@ let translate ?(filename: string option) source : error list * string option =
     let ts_ast = Preprocessor.filter_ast_comments ts_ast in
     (* Caml.print_endline @@ Ts.Ast.show_program Loc.pp Loc.pp ts_ast; *)
     let ts_str = Ts.Generator.gen_program ts_ast in
+    let ts_str = ts_str ^ "\n" in
     (errors, Some ts_str)
   with Mapper.Error (l, s) ->
     (errors @ [of_mapper_error (l, s)], None)
