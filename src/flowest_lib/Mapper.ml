@@ -16,9 +16,14 @@ let map_with_loc: 'a 'b. FLoc.t * 'a -> f:('a -> 'b) -> TLoc.t * 'b =
   fun (loc, node) ~f ->
     (map_loc loc, f node)
 
-exception Error of string
+exception Error of Ts.Loc.t * string
 
-let error str = raise @@ Error str
+let show_error ((loc, str): TLoc.t * string) =
+  TLoc.to_string loc ^ " " ^ str
+
+let error loc str = raise @@ Error (loc, str)
+let errorf loc str = raise @@ Error (map_loc loc, str)
+let errore str = raise @@ Error (TLoc.none, str)
 
 let rec _none () = ()
 
@@ -165,12 +170,12 @@ and map_type_object
       | Literal (loc, l) -> Literal (map_loc loc, map_literal l)
       | Identifier id -> Identifier (map_identifier id)
       | PrivateName name -> PrivateName (map_private_name name)
-      | Computed _ -> error "Computed properties aren't supported"
+      | Computed _ -> errorf loc "Computed properties aren't supported"
     in
     let map_value: (_, _) FlowObj.Property.value -> _ = function
       | Init t -> map_type t
-      | Get _ -> error "No setter declaration in TS."
-      | Set _ -> error "No getter declaration in TS."
+      | Get (l, _) -> errorf l "No setter declaration in TS."
+      | Set (l, _) -> errorf l "No getter declaration in TS."
     in
     let ts_t' = { Property.
       key = map_key t'.key;
@@ -203,10 +208,10 @@ and map_type_object
   in
   let map_property: (_, _) FlowObj.property -> (_, _) property = function
     | Property p -> Property (map_common_property p)
-    | SpreadProperty _ -> error "Spread properties aren't supported"
+    | SpreadProperty (l, _) -> errorf l "Spread properties aren't supported"
     | Indexer i -> Indexer (map_indexer i)
     | CallProperty p -> CallProperty (map_call_property p)
-    | InternalSlot _ -> error "Internal slots aren't supported"
+    | InternalSlot (l, _) -> errorf l "Internal slots aren't supported"
   in
   fun t ->
     { properties = List.map t.properties ~f:map_property }
@@ -253,7 +258,7 @@ and map_type
     | Nullable t -> Union (map_type t, (tloc, Null), [(tloc, Undefined)])
     | Function f -> Function (map_type_function f)
     | Object o -> Object (map_type_object o)
-    | Interface _ -> error "No inline interfaces in TS."
+    | Interface _ -> error tloc "No inline interfaces in TS."
     | Array t -> Array (map_type t)
     | Generic g -> special_map_generic @@ map_type_generic g
     | Union (t1, t2, ts) ->
@@ -265,7 +270,7 @@ and map_type
     | StringLiteral l -> StringLiteral (map_string_literal l)
     | NumberLiteral l -> NumberLiteral (map_number_literal l)
     | BooleanLiteral b -> BooleanLiteral b
-    | Exists -> error "No '*' in TS."
+    | Exists -> error tloc "No '*' in TS."
   in
   (tloc, ts_t')
 
@@ -375,9 +380,10 @@ and map_stat_declare_function
   -> (TLoc.t, TLoc.t) TsAst.Statement.DeclareFunction.t
 =
   fun t ->
-    let annot = match t.annot |> map_type_annotation |> snd with
+    let (l, annot) = map_type_annotation t.annot in
+    let annot = match annot with
       | Function f -> f
-      | _ -> error "Expected a function type in DeclareFunction"
+      | _ -> error l "Expected a function type in DeclareFunction"
     in
     { TsAst.Statement.DeclareFunction.
       id = map_identifier t.id;
@@ -425,14 +431,15 @@ and map_stat_declare_export_declaration
     | Variable (l, s) -> map_loc l, DeclareVariable (map_stat_declare_variable s)
     | Function (l, s) -> map_loc l, DeclareFunction (map_stat_declare_function s)
     | Class (l, s) -> map_loc l, DeclareClass (map_stat_declare_class s)
-    | DefaultType _ -> error "DefaultType isn't supported"
+    | DefaultType (l, _) -> errorf l "DefaultType isn't supported"
     | NamedType (l, s) -> map_loc l, DeclareTypeAlias (map_stat_type_alias s)
-    | NamedOpaqueType _ -> error "'declare export opaque type' isn't supported"
+    | NamedOpaqueType (l, _) ->
+      errorf l "'declare export opaque type' isn't supported"
     | Interface (l, s) -> map_loc l, DeclareInterface (map_stat_interface s)
   in
   fun t ->
     let flow_decl = match t.declaration with
-      | None -> error "'declare export' without 'declaration' isn't supported"
+      | None -> errore "'declare export' without 'declaration' isn't supported"
       | Some d -> d
     in
     let declaration = map_declaration flow_decl in
@@ -448,8 +455,8 @@ and map_stat_export_default_declaration
   let module FlowExport = FlowAst.Statement.ExportDefaultDeclaration in
   let map_declaration: (_, _) FlowExport.declaration -> _ = function
     | Declaration s -> map_statement s
-    | Expression _ ->
-      error "Only statements are supported in 'export default'"
+    | Expression (l, _) ->
+      errorf l "Only statements are supported in 'export default'"
   in
   fun t ->
     {
@@ -481,21 +488,21 @@ and map_stat_import_declaration
     }
 
 and map_statement
-  : (FLoc.t, FLoc.t) FlowAst.Statement.t
-  -> (TLoc.t, TLoc.t) TsAst.Statement.t
+  ((loc, t'): (FLoc.t, FLoc.t) FlowAst.Statement.t)
+  : (TLoc.t, TLoc.t) TsAst.Statement.t
 =
   let open TsAst.Statement in
-  map_with_loc ~f:(fun (t': _ FlowAst.Statement.t') ->
-    match t' with
+  let ts_t' = match t' with
     | DeclareClass s -> DeclareClass (map_stat_declare_class s)
     | DeclareExportDeclaration s -> map_stat_declare_export_declaration s
     | DeclareFunction s -> DeclareFunction (map_stat_declare_function s)
     | DeclareInterface s -> DeclareInterface (map_stat_interface s)
-    | DeclareModule _s -> error "DeclareModule isn't supported"
-    | DeclareModuleExports _s -> error "DeclareModuleExports isn't supported"
+    | DeclareModule _s -> errorf loc "DeclareModule isn't supported"
+    | DeclareModuleExports _s ->
+      errorf loc "DeclareModuleExports isn't supported"
     | DeclareTypeAlias s -> DeclareTypeAlias (map_stat_type_alias s)
     | DeclareOpaqueType _s ->
-      error "'declare opaque type' isn't supported" (* TODO: *)
+      errorf loc "'declare opaque type' isn't supported" (* TODO: *)
     | DeclareVariable s -> DeclareVariable (map_stat_declare_variable s)
     | ExportDefaultDeclaration s ->
       ExportDefaultDeclaration (map_stat_export_default_declaration s)
@@ -504,9 +511,10 @@ and map_statement
     | ImportDeclaration s -> ImportDeclaration (map_stat_import_declaration s)
     | InterfaceDeclaration s -> InterfaceDeclaration (map_stat_interface s)
     | TypeAlias s -> TypeAlias (map_stat_type_alias s)
-    | OpaqueType _s -> error "'opaque type' isn't supported" (* TODO: *)
-    | _ -> error "A statement isn't supported"
-  )
+    | OpaqueType _s -> errorf loc "'opaque type' isn't supported" (* TODO: *)
+    | _ -> errorf loc "A statement isn't supported"
+  in
+  (map_loc loc, ts_t')
 
 and map_program
   ((loc, stats, comments): (FLoc.t, FLoc.t) FlowAst.program)
