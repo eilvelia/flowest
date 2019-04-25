@@ -107,7 +107,7 @@ end = struct
         let name = Identifier.gen t'.name in
         let annot = Type.gen t'.annot in
         let opt = if t'.optional then "?" else "" in
-        name ^ ":" ^ opt ^ " " ^ annot
+        name ^ opt ^ ":" ^ " " ^ annot
     end
     module RestParam = struct
       let gen ((_, t'): (_, _) Ast.Type.Function.RestParam.t) =
@@ -243,7 +243,7 @@ end = struct
     | Number -> "number"
     | String -> "string"
     | Boolean -> "boolean"
-    | Function f -> Function.gen ~arrow:true f
+    | Function f -> "(" ^ Function.gen ~arrow:true f ^ ")"
     | Object o -> Object.gen o
     | Array t -> "(" ^ gen t ^ ")[]"
     | Generic t -> Generic.gen t
