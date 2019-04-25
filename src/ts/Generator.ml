@@ -425,5 +425,29 @@ end = struct
 end
 
 (* without comments *)
-let gen_program_simple ((_, statements, _comments): (_, _) Ast.program) =
-  List.map statements ~f:Statement.gen |> String.concat ~sep:"\n"
+(* let gen_program_simple ((_, stats, _comments): (_, _) Ast.program) =
+  List.map stats ~f:Statement.gen |> String.concat ~sep:"\n" *)
+
+let gen_program: (Loc.t, Loc.t) Ast.program -> string =
+  let module Node = struct
+    type t = {
+      loc: Loc.t;
+      gen: unit -> string;
+    }
+  end in
+  let create_stat_node s = Node.{
+    loc = fst s;
+    gen = fun () -> Statement.gen s;
+  } in
+  let create_comment_node c = Node.{
+    loc = fst c;
+    gen = fun () -> Comment.gen c;
+  } in
+  let compare (a: Node.t) (b: Node.t) =
+    Loc.compare_position a.loc.start b.loc.start in
+  fun (_, stats, comments) ->
+    let list = List.map stats ~f:create_stat_node
+      @ List.map comments ~f:create_comment_node in
+    let sorted = List.stable_sort list ~compare in
+    let strings = List.map sorted ~f:(fun n -> n.gen ()) in
+    String.concat ~sep:"\n" strings

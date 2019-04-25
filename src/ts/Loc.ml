@@ -8,6 +8,18 @@ type position = {
 let position_to_string { line; column } =
   Int.to_string line ^ ":" ^ Int.to_string column
 
+let compare_position a b =
+  if a.line < b.line then
+    -1
+  else if a.line > b.line then
+    1
+  else if a.column < b.column then
+    -1
+  else if a.column > b.column then
+    1
+  else
+    0
+
 type t = {
   start: position;
   _end: position;
