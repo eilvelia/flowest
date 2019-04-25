@@ -355,14 +355,16 @@ end = struct
         | None -> ""
       in
       let specifiers = match t.specifiers with
-        | Some s -> gen_specifier s ^ " "
+        | Some s -> gen_specifier s
         | None -> ""
       in
       let source = match t.source with
         | Some (_, src) -> "from " ^ StringLiteral.gen src
         | None -> ""
       in
-      "export " ^ declaration ^ specifiers ^ source
+      let ws =
+        if Option.(is_some t.specifiers && is_some t.source) then " " else "" in
+      "export " ^ declaration ^ specifiers ^ ws ^ source
   end
 
   module ExportDefaultDeclaration = struct
