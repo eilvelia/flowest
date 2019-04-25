@@ -270,7 +270,7 @@ and map_type
     | StringLiteral l -> StringLiteral (map_string_literal l)
     | NumberLiteral l -> NumberLiteral (map_number_literal l)
     | BooleanLiteral b -> BooleanLiteral b
-    | Exists -> error tloc "No '*' in TS."
+    | Exists -> Any
   in
   (tloc, ts_t')
 
