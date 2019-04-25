@@ -1,4 +1,8 @@
 open! Base
 
-val translate: ?filename:string -> string -> string
+type error
+
+val show_error: error -> string
+
+val translate: ?filename:string -> string -> error list * string option
 (** [translate ?filename source]. Converts Flow to TypeScript. *)

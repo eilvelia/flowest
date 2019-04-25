@@ -47,8 +47,8 @@ let replace (s: string) =
   let rec go acc = function
     | x :: y :: xs ->
       begin match Directive.parse x with
-      | Some RemoveNextLine -> go (x :: acc) xs
-      | Some RemoveLine -> go acc (y :: xs)
+      | Some RemoveNextLine -> go ("" :: x :: acc) xs
+      | Some RemoveLine -> go ("" :: acc) (y :: xs)
       | None -> go (x :: acc) (y :: xs)
       end
     | x :: [] when Directive.(parse x =? Some RemoveLine) -> acc

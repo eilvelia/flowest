@@ -20,5 +20,6 @@ let () =
   let filename = Sys.argv.(1) in
   let output_filename = Sys.argv.(2) in
   let input_string = read_file filename in
-  let output = translate ~filename input_string in
-  write_file output_filename output
+  let (errors, result_opt) = translate ~filename input_string in
+  List.iter errors ~f:(fun err -> Caml.prerr_endline @@ show_error err);
+  Option.value_map result_opt ~default:() ~f:(write_file output_filename)
