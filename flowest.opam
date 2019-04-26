@@ -23,7 +23,7 @@ depends: [
   "utop" {dev}
 ]
 pin-depends: [
-  ["flow_parser.0.96.1" "git+https://github.com/Bannerets/flow.git#fork/parser"]
+  ["flow_parser.0.96.1" "git+https://github.com/Bannerets/flow.git#v0.96.1-parser-fork.0"]
 
   # Currently the latest version on OPAM shows warnings when used with Base
   ["ppx_deriving.dev"
