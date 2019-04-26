@@ -74,7 +74,7 @@ type D = Partial<{ a: A, b: number }>
 |   ✅  | Mixed       | `mixed`                                 | `unknown` |
 |   ✅  | Void        | `void`                                  | `void` 🚩 |
 |       | BigInt      | `type A = 2n`                           | `type A = 2n` |
-|   ✅  | Union       | `A | B | C`                             | `A | B | C` |
+|   ✅  | Union       | `A \| B \| C`                           | `A \| B \| C` |
 |   ✅  | Intersection | `A & B & C`                            | `A & B & C` |
 |   ✅  | Typeof      | `typeof T`                              | `typeof T` |
 |   ✅  | Tuples      | `[T, U]`                                | `[T, U]` |
