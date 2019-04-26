@@ -1,6 +1,6 @@
 opam-version: "2.0"
 name: "flowest"
-version: "0.0.0"
+version: "0.1.0"
 synopsis: "Convert Flow to TypeScript"
 description: "Convert Flow to TypeScript"
 maintainer: "Bannerets <comonoid@protonmail.com>"

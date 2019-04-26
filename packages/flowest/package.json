@@ -1,7 +1,6 @@
 {
-  "private": true,
   "name": "flowest",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "Convert Flow to TypeScript",
   "main": "flowest.js",
   "scripts": {
