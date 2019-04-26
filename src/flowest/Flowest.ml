@@ -2,10 +2,10 @@ open! Base
 open! FlowestLib
 
 let read_file filename =
-    let ch = Caml.open_in filename in
-    let str = Caml.really_input_string ch (Caml.in_channel_length ch) in
-    Caml.close_in ch;
-    str
+  let ch = Caml.open_in filename in
+  let str = Caml.really_input_string ch (Caml.in_channel_length ch) in
+  Caml.close_in ch;
+  str
 
 let write_file filename str =
   let ch = Caml.open_out filename in
@@ -20,6 +20,7 @@ let () =
   let filename = Sys.argv.(1) in
   let output_filename = Sys.argv.(2) in
   let input_string = read_file filename in
-  let (errors, result_opt) = translate ~filename input_string in
-  List.iter errors ~f:(fun err -> Caml.prerr_endline @@ show_error err);
+  let (errors, result_opt) = Translator.translate ~filename input_string in
+  List.iter errors ~f:(fun err ->
+    Caml.prerr_endline @@ Translator.Err.show err);
   Option.value_map result_opt ~default:() ~f:(write_file output_filename)

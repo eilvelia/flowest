@@ -58,12 +58,11 @@ let replace (s: string) =
   let res_lines = List.rev @@ go [] lines in
   String.concat ~sep:"\n" res_lines
 
-let filter_comments (l: _ Ts.Ast.Comment.t list) =
+let is_directive_comment: 'a. 'a Ts.Ast.Comment.t -> bool =
   let open Ts.Ast.Comment in
-  let open Directive in
-  let open Option in
-  List.filter l ~f:(fun (_, (Block s | Line s)) -> parse_pure s |> is_none)
+  fun (_, (Block s | Line s)) ->
+    Directive.parse_pure s |> Option.is_none
 
-let filter_ast_comments (p: (_, _) Ts.Ast.program): (_, _) Ts.Ast.program =
-  let (a, b, comments) = p in
-  (a, b, filter_comments comments)
+let filter_directive_comments (p: (_, _) Ts.Ast.program): (_, _) Ts.Ast.program =
+  let (loc, stats, comms) = p in
+  (loc, stats, List.filter comms ~f:is_directive_comment)
