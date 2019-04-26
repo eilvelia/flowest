@@ -1,0 +1,53 @@
+opam-version: "2.0"
+name: "flowest"
+version: "0.1.0"
+synopsis: "Convert Flow to TypeScript"
+description: "Convert Flow to TypeScript"
+maintainer: "Bannerets <comonoid@protonmail.com>"
+license: "MIT"
+homepage: "https://github.com/Bannerets/flowest"
+dev-repo: "git+https://github.com/Bannerets/flowest.git"
+bug-reports: "https://github.com/Bannerets/flowest/issues"
+build: [["dune" "build" "-p" name "-j" jobs]]
+run-test: [["dune" "runtest" "-p" name]]
+depends: [
+  "base" {= "v0.12.0"}
+  "base-bigarray" {= "base"}
+  "base-bytes" {= "base"}
+  "base-threads" {= "base"}
+  "base-unix" {= "base"}
+  "biniou" {= "1.2.0"}
+  "cmdliner" {= "1.0.3"}
+  "conf-m4" {= "1"}
+  "conf-which" {= "1"}
+  "cppo" {= "1.6.5"}
+  "dune" {= "1.9.1"}
+  "easy-format" {= "1.3.1"}
+  "flow_parser" {= "0.96.1"}
+  "gen" {= "0.5.1"}
+  "jbuilder" {= "transition"}
+  "js_of_ocaml-compiler" {= "3.4.0"}
+  "ocaml" {= "4.07.1"}
+  "ocaml-migrate-parsetree" {= "1.2.0"}
+  "ocaml-system" {= "4.07.1"}
+  "ocamlfind" {= "1.8.0"}
+  "ppx_derivers" {= "1.2.1"}
+  "ppx_deriving" {= "dev"}
+  "ppx_gen_rec" {= "1.0.0"}
+  "ppx_tools" {= "5.1+4.06.0"}
+  "ppx_tools_versioned" {= "5.2"}
+  "ppxfind" {= "1.2"}
+  "result" {= "1.3"}
+  "sedlex" {= "1.99.4"}
+  "sexplib0" {= "v0.12.0"}
+  "wtf8" {= "1.0.1"}
+  "yojson" {= "1.7.0"}
+]
+pin-depends: [
+  ["flow_parser.0.96.1" "git+https://github.com/Bannerets/flow.git#v0.96.1-parser-fork.0"]
+
+  # Currently the latest version on OPAM shows warnings when used with Base
+  ["ppx_deriving.dev"
+    "git+https://github.com/ocaml-ppx/ppx_deriving.git#f1857c2231280b1cb7fd682d57255a64319bb717"]
+]
+authors: "Bannerets <comonoid@protonmail.com>"
