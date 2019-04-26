@@ -51,15 +51,15 @@ type C = 3
 `flowest-remove-next-line` and `flowest-remove-line`:
 
 ```javascript
-/*$$ type D = Partial<{ a: A, b: number }> */
+/*$$ export type Id = unknown */
 // flowest-remove-next-line
-type D = $Shape<{ a: A, b: number }>
+export opaque type Id = string
 ```
 
 Output:
 
 ```typescript
-type D = Partial<{ a: A, b: number }>
+export type Id = unknown
 ```
 
 ### Table
