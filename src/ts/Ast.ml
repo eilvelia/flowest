@@ -439,7 +439,7 @@ and Statement: sig
     | InterfaceDeclaration of ('M, 'T) Interface.t
     | TypeAlias of ('M, 'T) TypeAlias.t
     (* | OpaqueType of ('M, 'T) OpaqueType.t *)
-    (* | RawTs of string *) (* TODO: *)
+    | RawTs of string
   [@@deriving show]
 end = Statement
 

@@ -424,6 +424,7 @@ end = struct
     | ImportDeclaration s -> ImportDeclaration.gen s
     | InterfaceDeclaration s -> Interface.gen s
     | TypeAlias s -> TypeAlias.gen s
+    | RawTs str -> str
 end
 
 (* without comments *)

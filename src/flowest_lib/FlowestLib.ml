@@ -36,6 +36,7 @@ let translate ?(filename: string option) source : error list * string option =
   try
     let ts_ast = Mapper.map_program flow_ast in
     let ts_ast = Preprocessor.filter_ast_comments ts_ast in
+    let ts_ast = Postprocessor.raw_ts_comments ts_ast in
     (* Caml.print_endline @@ Ts.Ast.show_program Loc.pp Loc.pp ts_ast; *)
     let ts_str = Ts.Generator.gen_program ts_ast in
     let ts_str = ts_str ^ "\n" in
