@@ -1,0 +1,4 @@
+(test
+  (name TestRunner)
+  (libraries unix flowest.lib)
+)

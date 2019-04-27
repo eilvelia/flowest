@@ -13,6 +13,10 @@ clean:
 .PHONY: rebuild
 rebuild: | clean build
 
+.PHONY: build-test
+build-test:
+	dune build test/TestRunner.exe
+
 .PHONY: test
 test:
 	dune runtest

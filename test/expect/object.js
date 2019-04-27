@@ -1,0 +1,13 @@
+type O1 = {}
+type O2 = { a: 1 }
+type O3 = { a: 1, b: 2; c: 3 }
+type V1 = { +a: 1, -b: 2, c: 3, +d: 4 }
+type Opt1 = { a?: 1, b: 2, -c?: 3, +d?: 4 }
+type I1 = { [string]: mixed }
+type I2 = { [k: number]: mixed }
+type I3 = { a: string, [number]: mixed }
+type Exact1 = {| a: 1, b: 2 |}
+type Exact2 = {||}
+type Inexact1 = { a: 1, ... }
+type Inexact2 = { a: 1; ... }
+type Inexact3 = { ... }

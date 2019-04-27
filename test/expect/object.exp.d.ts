@@ -1,0 +1,13 @@
+type O1 = {  }
+type O2 = { a: 1 }
+type O3 = { a: 1; b: 2; c: 3 }
+type V1 = { readonly a: 1; b: 2; c: 3; readonly d: 4 }
+type Opt1 = { a?: 1; b: 2; c?: 3; readonly d?: 4 }
+type I1 = { [key: string]: unknown }
+type I2 = { [k: number]: unknown }
+type I3 = { a: string; [key: number]: unknown }
+type Exact1 = { a: 1; b: 2 }
+type Exact2 = {  }
+type Inexact1 = { a: 1 }
+type Inexact2 = { a: 1 }
+type Inexact3 = {  }
