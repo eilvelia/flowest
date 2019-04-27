@@ -386,7 +386,7 @@ end = struct
       match s with
       | ImportNamedSpecifiers xs ->
         let str = List.map xs ~f:gen_named_specifier |> String.concat ~sep:", " in
-        "{ " ^ str ^ "}"
+        "{ " ^ str ^ " }"
       | ImportNamespaceSpecifier (_, id) ->
         "* as " ^ Identifier.gen id
 
