@@ -138,8 +138,8 @@ export type Id = unknown
 | Status | Name       | Flow                                    | TypeScript |
 |-------|-------------|-----------------------------------------|------------|
 |   ✅  | $ReadOnlyArray | `$ReadOnlyArray<T>`                  | `ReadonlyArray<T>` |
-|       | $ReadOnlyMap | `$ReadOnlyMap<K, V>`                   | `ReadonlyMap<K, V>` |
-|       | $ReadOnlySet | `$ReadOnlySet<T>`                      | `ReadonlySet<T>` |
+|   ✅  | $ReadOnlyMap | `$ReadOnlyMap<K, V>`                   | `ReadonlyMap<K, V>` |
+|   ✅  | $ReadOnlySet | `$ReadOnlySet<T>`                      | `ReadonlySet<T>` |
 |       | Iterator    | -                                       | - |
 |       | Iterable    | -                                       | - |
 |       | AsyncInterator | -                                    | - |

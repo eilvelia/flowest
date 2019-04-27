@@ -308,8 +308,6 @@ and special_map_generic
         gen_unq (locb, Id.{ name = "Partial"; comments }) (Some (loca, [t]))
       | "$ReadOnly", Some (loca, [t]) ->
         gen_unq (locb, Id.{ name = "Readonly"; comments }) (Some (loca, [t]))
-      | "$ReadOnlyArray", Some (loca, [t]) ->
-        gen_unq (locb, Id.{ name = "ReadonlyArray"; comments }) (Some (loca, [t]))
       | "$Keys", Some (_loca, [t]) ->
         Keyof t
       | "$Values", Some (_loca, [t]) ->
@@ -325,6 +323,12 @@ and special_map_generic
         gen_unq (locb, Id.{ name = "ReturnType"; comments }) (Some (loca, [t]))
       | "$NonMaybeType", Some (loca, [t]) ->
         gen_unq (locb, Id.{ name = "NonNullable"; comments }) (Some (loca, [t]))
+      | "$ReadOnlyArray", Some (loca, [t]) ->
+        gen_unq (locb, Id.{ name = "ReadonlyArray"; comments }) (Some (loca, [t]))
+      | "$ReadOnlyMap", Some (loca, [k; v]) ->
+        gen_unq (locb, Id.{ name = "ReadonlyMap"; comments }) (Some (loca, [k; v]))
+      | "$ReadOnlySet", Some (loca, [t]) ->
+        gen_unq (locb, Id.{ name = "ReadonlySet"; comments }) (Some (loca, [t]))
       | _ ->
         Generic g
 
