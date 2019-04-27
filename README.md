@@ -88,14 +88,11 @@ export type Id = unknown
 |   ✅  | Read-only fields | `interface A { +b: B }`            | `interface A { readonly b: B }` |
 |   ✅  | Write-only fields | `interface A { -c: C }`           | `interface A { c: C }` 🚩 |
 |       | Inline interfaces | `type T = interface { a: A }`     | - |
-|       | Spread properties | `{ a: A, ...O }`                  | - |
+|       | Spread properties | `{ a: A, ...O }`                  | `{ a: A } & O` 🚩 |
 |       | Internal slots | `{ [[call]]: T => U }`               | - |
-|       | Generator   | -                                       | - |
-|       | AsyncGenerator | -                                    | - |
 |   ✅  | Partial     | `$Rest<T, {}>`                          | `Partial<T>` |
 |       | $Shape      | `$Shape<T>`                             | - (not expressible) |
 |   ✅  | $ReadOnly   | `$ReadOnly<T>`                          | `Readonly<T>` |
-|   ✅  | $ReadOnlyArray | `$ReadOnlyArray<T>`                  | `ReadonlyArray<T>` |
 |   ✅  | $Keys       | `$Keys<T>`                              | `keyof T` |
 |   ✅  | $Values     | `$Values<T>`                            | `T[keyof T]` |
 |   ✅  | $Exact      | `$Exact<T>`                             | `T` 🚩 |
@@ -104,11 +101,11 @@ export type Id = unknown
 |   ✅  | Element type | `$ElementType<T, K>`                   | `T[K]` |
 |   ✅  | Return type | `$Call<F>`                              | `ReturnType<F>` |
 |       | $Call       | `$Call<F, A1, A2, ..., Ak>`             | - (not expressible) |
-|       | $Rest       | `$Rest<O1, O2>`                         | - |
-|       | $Diff       | `$Diff<O1, O2>`                         | - |
-|       | $ObjMap     | `$ObjMap<{ a: A }, <X>(X) => X>`        | - |
-|       | $ObjMapi    | `$ObjMapi<{ a: A }, <I>(I) => I>`       | - |
-|       | $TupleMap   | `$TupleMap<[1, 2, 3], <X>(X) => X>`     | - |
+|       | $Diff       | `$Diff<T, U>`          | `Pick<T, Exclude<keyof T, keyof U>>` 🚩 |
+|       | $Rest       | `$Rest<T, U>`                           | - |
+|       | $ObjMap     | `$ObjMap<T, <X>(X) => X>`               | `{ [P in keyof T]: T[P] }` |
+|       | $ObjMapi    | `$ObjMapi<T, <I>(I) => I>`              | `{ [I in keyof T]: I }` |
+|       | $TupleMap   | `$TupleMap<T, <X>(X) => X>`             | `{ [P in keyof T]: T[P] }` |
 |   ✅  | $NonMaybeType | `$NonMaybeType<T>`                    | `NonNullable<T>` 🚩 |
 |       | $CharSet    | `$CharSet<"abc">`                       | - (not expressible) |
 |       | $Trusted    | `$Trusted<T>`                           | - (not expressible) |
@@ -135,6 +132,20 @@ export type Id = unknown
 |   ✅  | Declare function | `declare function f(string): number` | `declare function f(a: string): number` |
 |   ✅  | Declare class | `declare class B<T, U = D> extends A implements I1, I2 {}` | the same |
 |       | `mixins` in declare class | `declare class B mixins A {}` | -
+
+#### Core libdefs
+
+| Status | Name       | Flow                                    | TypeScript |
+|-------|-------------|-----------------------------------------|------------|
+|   ✅  | $ReadOnlyArray | `$ReadOnlyArray<T>`                  | `ReadonlyArray<T>` |
+|       | $ReadOnlyMap | `$ReadOnlyMap<K, V>`                   | `ReadonlyMap<K, V>` |
+|       | $ReadOnlySet | `$ReadOnlySet<T>`                      | `ReadonlySet<T>` |
+|       | Iterator    | -                                       | - |
+|       | Iterable    | -                                       | - |
+|       | AsyncInterator | -                                    | - |
+|       | AsyncInterable | -                                    | - |
+|       | Generator   | -                                       | - |
+|       | AsyncGenerator | -                                    | - |
 
 You can manually write TS code inside `/*$$ ... */` for a feature that is not supported.
 
