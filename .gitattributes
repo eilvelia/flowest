@@ -1,2 +1,4 @@
 *.ml linguist-language=OCaml
 *.flow linguist-language=JavaScript
+test/expect/*.js linguist-detectable=false
+test/expect/*.ts linguist-detectable=false
