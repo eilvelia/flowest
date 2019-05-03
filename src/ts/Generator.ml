@@ -233,6 +233,16 @@ end = struct
       Option.value_map o ~default:"" ~f:gen
   end
 
+  module Conditional = struct
+    let gen ((_, t'): (_, _) Ast.Type.Conditional.t) =
+      let check_type = Type.gen t'.check_type in
+      let extends_type = Type.gen t'.extends_type in
+      let true_type = Type.gen t'.true_type in
+      let false_type = Type.gen t'.false_type in
+      check_type ^ " extends "
+        ^ extends_type ^ " ? " ^ true_type ^ " : " ^ false_type
+  end
+
   module MappedType = struct
     let gen_modifier: Ast.Type.MappedType.modifier -> _ = function
       | Minus -> "-"
@@ -247,7 +257,7 @@ end = struct
         ~default:"" ~f:(fun x -> gen_modifier x ^ "?") in
       let value = Type.gen t'.value in
       "{ " ^ readonly ^ "[" ^ type_name ^ " in " ^ type_constraint ^ "]"
-      ^ optional ^ ": " ^ value ^ " }"
+        ^ optional ^ ": " ^ value ^ " }"
   end
 
   let rec gen ((_, t'): (_, _) Ast.Type.t) = match t' with
@@ -278,6 +288,8 @@ end = struct
     | Keyof t -> "keyof " ^ gen t
     | Unique t -> "unique " ^ gen t
     | Readonly t -> "readonly " ^ gen t
+    | Infer t -> "infer " ^ gen t
+    | Conditional c -> Conditional.gen c
     | IndexedAccess (o, i) -> gen o ^ "[" ^ gen i ^ "]"
     | MappedType m -> MappedType.gen m
     | InlineTs str -> str

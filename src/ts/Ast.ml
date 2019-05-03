@@ -252,6 +252,17 @@ and Type: sig
     [@@deriving show]
   end
 
+  module Conditional: sig
+    type ('M, 'T) t = 'M * ('M, 'T) t'
+    and ('M, 'T) t' = {
+      check_type: ('M, 'T) Type.t;
+      extends_type: ('M, 'T) Type.t;
+      true_type: ('M, 'T) Type.t;
+      false_type: ('M, 'T) Type.t;
+    }
+    [@@deriving show]
+  end
+
   module MappedType: sig
     type ('M, 'T) t = 'M * ('M, 'T) t'
     and ('M, 'T) t' = {
@@ -296,6 +307,8 @@ and Type: sig
     | Keyof of ('M, 'T) t
     | Unique of ('M, 'T) t
     | Readonly of ('M, 'T) t
+    | Infer of ('M, 'T) t
+    | Conditional of ('M, 'T) Conditional.t
     | IndexedAccess of ('M, 'T) t * ('M, 'T) t
     | MappedType of ('M, 'T) MappedType.t
     | InlineTs of string
