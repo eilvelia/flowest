@@ -252,6 +252,19 @@ and Type: sig
     [@@deriving show]
   end
 
+  module MappedType: sig
+    type ('M, 'T) t = 'M * ('M, 'T) t'
+    and ('M, 'T) t' = {
+      readonly: modifier option;
+      type_name: 'T Identifier.t;
+      type_constraint: ('M, 'T) Type.t;
+      optional: modifier option;
+      value: ('M, 'T) Type.t;
+    }
+    and modifier = Minus | Plus | None
+    [@@deriving show]
+  end
+
   type ('M, 'T) t = 'T * ('M, 'T) t'
 
   and ('M, 'T) t' =
@@ -284,6 +297,7 @@ and Type: sig
     | Unique of ('M, 'T) t
     | Readonly of ('M, 'T) t
     | IndexedAccess of ('M, 'T) t * ('M, 'T) t
+    | MappedType of ('M, 'T) MappedType.t
     | InlineTs of string
 
   (* and ('M, 'T) annotation = 'M * ('M, 'T) t

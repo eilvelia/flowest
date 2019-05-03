@@ -233,6 +233,23 @@ end = struct
       Option.value_map o ~default:"" ~f:gen
   end
 
+  module MappedType = struct
+    let gen_modifier: Ast.Type.MappedType.modifier -> _ = function
+      | Minus -> "-"
+      | Plus -> "+"
+      | None -> ""
+    let gen ((_, t'): (_, _) Ast.Type.MappedType.t) =
+      let readonly = Option.value_map t'.readonly
+        ~default:"" ~f:(fun x -> gen_modifier x ^ "readonly ") in
+      let type_name = Identifier.gen t'.type_name in
+      let type_constraint = Type.gen t'.type_constraint in
+      let optional = Option.value_map t'.optional
+        ~default:"" ~f:(fun x -> gen_modifier x ^ "?") in
+      let value = Type.gen t'.value in
+      "{ " ^ readonly ^ "[" ^ type_name ^ " in " ^ type_constraint ^ "]"
+      ^ optional ^ ": " ^ value ^ " }"
+  end
+
   let rec gen ((_, t'): (_, _) Ast.Type.t) = match t' with
     | Any -> "any"
     | Unknown -> "unknown"
@@ -262,6 +279,7 @@ end = struct
     | Unique t -> "unique " ^ gen t
     | Readonly t -> "readonly " ^ gen t
     | IndexedAccess (o, i) -> gen o ^ "[" ^ gen i ^ "]"
+    | MappedType m -> MappedType.gen m
     | InlineTs str -> str
 end
 
